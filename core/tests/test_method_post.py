@@ -21,7 +21,7 @@ class PostEmprestimoTest(TestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_post_status_code_201(self):
+    def test_metodo_post_status_code_201(self):
         data = {
             "valor_nominal": 10000.00,
             "taxa_juros": 10,
@@ -39,7 +39,7 @@ class PostEmprestimoTest(TestCase):
         )
         assert result.status_code == HTTP_201_CREATED
 
-    def test_post_status_code_401(self):
+    def test_metodo_post_status_code_401(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         data = {
             "valor_nominal": 10000.00,
@@ -57,7 +57,7 @@ class PostEmprestimoTest(TestCase):
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_post_status_code_400(self):
+    def test_metodo_post_status_code_400(self):
         data = {
             "valor_nominal": "afasfasfd",
             "taxa_juros": 10,
@@ -93,7 +93,7 @@ class PostPagamentoTest(TestCase):
         )
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_post_status_code_201(self):
+    def test_metodo_post_status_code_201(self):
         data = {
             "data_pagamento": "2020-12-10",
             "valor_pagamento": 100.00,
@@ -107,7 +107,7 @@ class PostPagamentoTest(TestCase):
         )
         assert result.status_code == HTTP_201_CREATED
 
-    def test_post_status_code_401(self):
+    def test_metodo_post_status_code_401(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         data = {
             "data_pagamento": "2020-10-10",
@@ -121,7 +121,7 @@ class PostPagamentoTest(TestCase):
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_post_status_code_400(self):
+    def test_metodo_post_status_code_400(self):
         data = {
             "data_pagamento": 1,
             "valor_pagamento": "100",
