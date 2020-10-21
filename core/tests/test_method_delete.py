@@ -5,7 +5,6 @@ from django.urls import reverse
 from rest_framework.status import (
     HTTP_405_METHOD_NOT_ALLOWED,
     HTTP_401_UNAUTHORIZED,
-    HTTP_404_NOT_FOUND,
 )
 from rest_framework.test import APIClient
 
