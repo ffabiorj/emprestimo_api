@@ -53,7 +53,7 @@ class UpdateEmprestimoTest(TestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_update_status_code_200(self):
+    def test_metodo_update_status_code_200(self):
         result = self.client.put(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)}),
             data=json.dumps(self.payload_emprestimo_correto),
@@ -61,7 +61,7 @@ class UpdateEmprestimoTest(TestCase):
         )
         assert result.status_code == HTTP_200_OK
 
-    def test_update_status_code_400(self):
+    def test_metodo_update_status_code_400(self):
         result = self.client.put(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)}),
             data=json.dumps(self.payload_emprestimo_errado),
@@ -69,7 +69,7 @@ class UpdateEmprestimoTest(TestCase):
         )
         assert result.status_code == HTTP_400_BAD_REQUEST
 
-    def test_update_status_401(self):
+    def test_metodo_update_status_401(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.put(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)}),
@@ -78,7 +78,7 @@ class UpdateEmprestimoTest(TestCase):
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_update_message_error(self):
+    def test_metodo_update_message_error(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.put(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)}),
@@ -134,7 +134,7 @@ class GetPagamentoTest(TestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_update_status_code_200(self):
+    def test_metodo_update_status_code_200(self):
         result = self.client.put(
             reverse("pagamentos-detail", kwargs={"pk": self.pagamento.id}),
             data=json.dumps(self.payload_pagamento_correto),
@@ -142,7 +142,7 @@ class GetPagamentoTest(TestCase):
         )
         assert result.status_code == HTTP_200_OK
 
-    def test_update_status_code_400(self):
+    def test_metodo_update_status_code_400(self):
         result = self.client.put(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)}),
             data=json.dumps(self.payload_pagamento_errado),
@@ -150,7 +150,7 @@ class GetPagamentoTest(TestCase):
         )
         assert result.status_code == HTTP_400_BAD_REQUEST
 
-    def test_update_status_401(self):
+    def test_metodo_update_status_401(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.put(
             reverse("pagamentos-detail", kwargs={"pk": self.pagamento.id}),
@@ -159,7 +159,7 @@ class GetPagamentoTest(TestCase):
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_update_message_error(self):
+    def test_metodo_update_message_error(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.put(
             reverse("pagamentos-detail", kwargs={"pk": self.pagamento.id}),
@@ -169,7 +169,7 @@ class GetPagamentoTest(TestCase):
         expected = {"detail": "As credenciais de autenticação não foram fornecidas."}
         assert result.json() == expected
 
-    def test_update_pagamento_id_errado(self):
+    def test_metodo_update_pagamento_id_errado(self):
         result = self.client.put(
             reverse("pagamentos-detail", kwargs={"pk": 30}),
             data=json.dumps(self.payload_pagamento_correto),
