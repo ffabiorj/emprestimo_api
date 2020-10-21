@@ -31,20 +31,20 @@ class DeleteEmprestimoTest(TestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_delete_status_code_405(self):
+    def test_metodo_delete_status_code_405(self):
         result = self.client.delete(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)})
         )
         assert result.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
-    def test_delete_status_401(self):
+    def test_metodo_delete_status_401(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.delete(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)})
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_delete_message_error(self):
+    def test_metodo_delete_message_error(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.delete(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)})
@@ -52,11 +52,11 @@ class DeleteEmprestimoTest(TestCase):
         expected = {"detail": "As credenciais de autenticação não foram fornecidas."}
         assert result.json() == expected
 
-    def test_delete_emprestimo_id_errado_erro_404(self):
+    def test_metodo_delete_emprestimo_id_errado_erro_404(self):
         result = self.client.delete(reverse("emprestimos-detail", kwargs={"pk": 5}))
         assert result.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
-    def test_delete_emprestimo_id_message_erro(self):
+    def test_metodo_delete_emprestimo_id_message_erro(self):
         result = self.client.delete(reverse("emprestimos-detail", kwargs={"pk": 5}))
         print(result.json())
         expected = {"detail": 'Método "DELETE" não é permitido.'}
@@ -90,20 +90,20 @@ class DeletePagamentoTest(TestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_delete_status_code_204(self):
+    def test_metodo_delete_status_code_204(self):
         result = self.client.delete(
             reverse("pagamentos-detail", kwargs={"pk": self.pagamento.id})
         )
         assert result.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
-    def test_delete_status_401(self):
+    def test_metodo_delete_status_401(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.delete(
             reverse("pagamentos-detail", kwargs={"pk": self.pagamento.id})
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_delete_message_error(self):
+    def test_metodo_delete_message_error(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.delete(
             reverse("pagamentos-detail", kwargs={"pk": self.pagamento.id})
@@ -111,11 +111,11 @@ class DeletePagamentoTest(TestCase):
         expected = {"detail": "As credenciais de autenticação não foram fornecidas."}
         assert result.json() == expected
 
-    def test_delete_pagamento_id_errado(self):
+    def test_metodo_delete_pagamento_id_errado(self):
         result = self.client.delete(reverse("pagamentos-detail", kwargs={"pk": 30}))
         assert result.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
-    def test_delete_emprestimo_id_message_erro(self):
+    def test_metodo_delete_emprestimo_id_message_erro(self):
         result = self.client.delete(reverse("emprestimos-detail", kwargs={"pk": 5}))
         expected = {"detail": 'Método "DELETE" não é permitido.'}
         assert result.json() == expected
