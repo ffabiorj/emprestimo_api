@@ -28,39 +28,39 @@ class GetEmprestimoTest(TestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_get_status_code_200(self):
+    def test_metodo_get_status_code_200(self):
         result = self.client.get(reverse("emprestimos-list"))
         assert result.status_code == HTTP_200_OK
 
-    def test_get_status_401(self):
+    def test_metodo_get_status_401(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.get(reverse("emprestimos-list"))
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_get_message_error(self):
+    def test_metodo_get_message_error(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.get(reverse("emprestimos-list"))
         expected = {"detail": "As credenciais de autenticação não foram fornecidas."}
         assert result.json() == expected
 
-    def test_get_emprestimo_por_id(self):
+    def test_metodo_get_emprestimo_por_id(self):
         result = self.client.get(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)})
         )
         assert result.status_code == HTTP_200_OK
 
-    def test_get_emprestimo_id_errado_erro_404(self):
+    def test_metodo_get_emprestimo_id_errado_erro_404(self):
         result = self.client.get(reverse("emprestimos-detail", kwargs={"pk": 30}))
         assert result.status_code == HTTP_404_NOT_FOUND
 
-    def test_get_emprestimo_id_sem_autorizacao(self):
+    def test_metodo_get_emprestimo_id_sem_autorizacao(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.get(
             reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)})
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_get_retorno_emprestimos_serializer(self):
+    def test_metodo_get_retorno_emprestimos_serializer(self):
         expect = [
             {
                 "id": str(self.emprestimo.id),
@@ -105,39 +105,39 @@ class GetPagamentoTest(TestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_get_status_code_200(self):
+    def test_metodo_get_status_code_200(self):
         result = self.client.get(reverse("pagamentos-list"))
         assert result.status_code == HTTP_200_OK
 
-    def test_get_status_401(self):
+    def test_metodo_get_status_401(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.get(reverse("pagamentos-list"))
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_get_message_error(self):
+    def test_metodo_get_message_error(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.get(reverse("pagamentos-list"))
         expected = {"detail": "As credenciais de autenticação não foram fornecidas."}
         assert result.json() == expected
 
-    def test_get_pagamento_por_id(self):
+    def test_metodo_get_pagamento_por_id(self):
         result = self.client.get(
             reverse("pagamentos-detail", kwargs={"pk": self.pagamento.id})
         )
         assert result.status_code == HTTP_200_OK
 
-    def test_get_pagamento_id_errado(self):
+    def test_metodo_get_pagamento_id_errado(self):
         result = self.client.get(reverse("pagamentos-detail", kwargs={"pk": 30}))
         assert result.status_code == HTTP_404_NOT_FOUND
 
-    def test_get_pagamento_id_sem_autorizacao(self):
+    def test_metodo_get_pagamento_id_sem_autorizacao(self):
         self.client = APIClient(HTTP_AUTHORIZATION="")
         result = self.client.get(
             reverse("pagamentos-detail", kwargs={"pk": self.pagamento.id})
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_get_retorno_pagamentos_serializer(self):
+    def test_metodo_get_retorno_pagamentos_serializer(self):
         expect = [
             {
                 "id": 1,
