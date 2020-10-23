@@ -9,10 +9,16 @@ from rest_framework.test import APIClient
 class GetEmprestimoTest(TestCase):
     def setUp(self):
         self.client = APIClient()
+        self.client2 = APIClient()
+
         url = reverse("token")
         self.owner = User.objects.create_user(
             username="teste",
             password="teste",
+        )
+        User.objects.create_user(
+            username="teste2",
+            password="teste2",
         )
         self.emprestimo = Emprestimo.objects.create(
             valor_nominal=10000,
@@ -24,9 +30,13 @@ class GetEmprestimoTest(TestCase):
             owner=self.owner,
         )
         data = {"username": "teste", "password": "teste"}
+        data2 = {"username": "teste2", "password": "teste2"}
+
         token = self.client.post(url, data=data, follow=True)
+        token2 = self.client.post(url, data=data2, follow=True)
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
+        self.client2.credentials(HTTP_AUTHORIZATION="Bearer " + token2.data["access"])
 
     def test_metodo_get_status_code_200(self):
         result = self.client.get(reverse("emprestimos-list"))
@@ -60,7 +70,7 @@ class GetEmprestimoTest(TestCase):
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_metodo_get_retorno_emprestimos_serializer(self):
+    def test_metodo_get_retorno_emprestimos_do_serializer(self):
         expect = [
             {
                 "id": str(self.emprestimo.id),
@@ -77,14 +87,24 @@ class GetEmprestimoTest(TestCase):
         result = self.client.get(reverse("emprestimos-list"))
         assert result.json() == expect
 
+    def test_nao_visualizar_emprestimo_de_outro_usuario(self):
+        result = self.client2.get(reverse("emprestimos-list"))
+        assert len(result.json()) == 0
+
 
 class GetPagamentoTest(TestCase):
     def setUp(self):
         self.client = APIClient()
+        self.client2 = APIClient()
+
         url = reverse("token")
         self.owner = User.objects.create_user(
             username="teste",
             password="teste",
+        )
+        self.owner2 = User.objects.create_user(
+            username="teste2",
+            password="teste2",
         )
         self.emprestimo = Emprestimo.objects.create(
             valor_nominal=10000,
@@ -101,9 +121,13 @@ class GetPagamentoTest(TestCase):
             emprestimo=self.emprestimo,
         )
         data = {"username": "teste", "password": "teste"}
+        data2 = {"username": "teste2", "password": "teste2"}
+
         token = self.client.post(url, data=data, follow=True)
+        token2 = self.client.post(url, data=data2, follow=True)
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
+        self.client2.credentials(HTTP_AUTHORIZATION="Bearer " + token2.data["access"])
 
     def test_metodo_get_status_code_200(self):
         result = self.client.get(reverse("pagamentos-list"))
@@ -137,7 +161,7 @@ class GetPagamentoTest(TestCase):
         )
         assert result.status_code == HTTP_401_UNAUTHORIZED
 
-    def test_metodo_get_retorno_pagamentos_serializer(self):
+    def test_metodo_get_retorno_pagamentos_do_serializer(self):
         expect = [
             {
                 "id": 1,
@@ -148,3 +172,7 @@ class GetPagamentoTest(TestCase):
         ]
         result = self.client.get(reverse("pagamentos-list"))
         assert result.json() == expect
+
+    def test_nao_visualizar_pagamento_de_outro_usuario(self):
+        result = self.client2.get(reverse("pagamentos-list"))
+        assert len(result.json()) == 0
