@@ -6,7 +6,7 @@
 
 Criação de uma api de emprestimos
 
-## Tools
+## Ferramentas utilizadas
 
 - Django
 - Django Rest FrameWork
