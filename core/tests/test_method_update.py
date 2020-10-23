@@ -16,10 +16,16 @@ from rest_framework.test import APIClient
 class UpdateEmprestimoTest(TestCase):
     def setUp(self):
         self.client = APIClient()
+        self.client2 = APIClient()
+
         url = reverse("token")
         self.owner = User.objects.create_user(
             username="teste",
             password="teste",
+        )
+        User.objects.create_user(
+            username="teste2",
+            password="teste2",
         )
         self.emprestimo = Emprestimo.objects.create(
             valor_nominal=10000,
@@ -49,9 +55,13 @@ class UpdateEmprestimoTest(TestCase):
             "owner": 1,
         }
         data = {"username": "teste", "password": "teste"}
+        data2 = {"username": "teste2", "password": "teste2"}
+
         token = self.client.post(url, data=data, follow=True)
+        token2 = self.client.post(url, data=data2, follow=True)
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
+        self.client2.credentials(HTTP_AUTHORIZATION="Bearer " + token2.data["access"])
 
     def test_metodo_update_status_code_200(self):
         result = self.client.put(
@@ -96,14 +106,28 @@ class UpdateEmprestimoTest(TestCase):
         )
         assert result.status_code == HTTP_404_NOT_FOUND
 
+    def test_metodo_nao_permiti_update_emprestimo_outro_usuario(self):
+        result = self.client2.put(
+            reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)}),
+            data=json.dumps(self.payload_emprestimo_correto),
+            content_type="application/json",
+        )
+        assert result.status_code == HTTP_404_NOT_FOUND
+
 
 class GetPagamentoTest(TestCase):
     def setUp(self):
         self.client = APIClient()
+        self.client2 = APIClient()
+
         url = reverse("token")
         self.owner = User.objects.create_user(
             username="teste",
             password="teste",
+        )
+        User.objects.create_user(
+            username="teste2",
+            password="teste2",
         )
         self.emprestimo = Emprestimo.objects.create(
             valor_nominal=10000,
@@ -130,9 +154,13 @@ class GetPagamentoTest(TestCase):
             "emprestimo": str(self.emprestimo.id),
         }
         data = {"username": "teste", "password": "teste"}
+        data2 = {"username": "teste2", "password": "teste2"}
+
         token = self.client.post(url, data=data, follow=True)
+        token2 = self.client.post(url, data=data2, follow=True)
 
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
+        self.client2.credentials(HTTP_AUTHORIZATION="Bearer " + token2.data["access"])
 
     def test_metodo_update_status_code_200(self):
         result = self.client.put(
@@ -172,6 +200,14 @@ class GetPagamentoTest(TestCase):
     def test_metodo_update_pagamento_id_errado(self):
         result = self.client.put(
             reverse("pagamentos-detail", kwargs={"pk": 30}),
+            data=json.dumps(self.payload_pagamento_correto),
+            content_type="application/json",
+        )
+        assert result.status_code == HTTP_404_NOT_FOUND
+
+    def test_metodo_nao_permite_update_pagamento_outro_usuario(self):
+        result = self.client2.put(
+            reverse("emprestimos-detail", kwargs={"pk": str(self.emprestimo.id)}),
             data=json.dumps(self.payload_pagamento_correto),
             content_type="application/json",
         )
