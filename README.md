@@ -80,20 +80,20 @@ Dados para emprestimo
     "data_solicitacao": "2020-10-10",
     "banco": "Santander",
     "cliente": "teste",
-    "owner": 1,
+    "owner": <id_user>
 }
 
 Dados para pagamento
 {
     "data_pagamento": "2020-12-10",
     "valor_pagamento": 100.00,
-    "emprestimo": 1,
+    "emprestimo": <id_emprestimo>
 }
 
 Dados para gerar o token
 {
-    "usuario": "teste",
-    "password": "teste"
+    "usuario": <user>,
+    "password": <password>
 }
 
 ```
